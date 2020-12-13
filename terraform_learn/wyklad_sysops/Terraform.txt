@@ -1,0 +1,13 @@
+1. Dobre praktyki - uzywac zasobow tzrobionych terraformwm przez terraforma
+
+2. terraform refresh - proba synchronizacji stanu jaki jest z tym co ma terraform
+
+3. stany, locki, importy, prowiderzy
+
+4. Problem stanu - wiecej niz jeden developer - zmiany stanu. Nie przechwoujemy go w gicie tak jak pliki tf, tylko gdzies w zcentralizowanym miejscu.
+
+5. terraform apply po zrobienia locka na dynamo-db - gdy cos idzie zle i zaczniemy klepac ctrl-c zatrzymamy proces terraforma i trzeba potem zrobic unlocka z forcem
+
+6. komendy po kolei: init, plan, apply
+
+7. np 3 srodowiska dev, test, prod - vanilla terraform - powtarzanie rzeczy (wspolne np: nazwa klastra, jakeis tam id, security grupy, loadbalancer itp)[#205] Terraform/Terragrunt - from zero to production – Piotr Szymański
