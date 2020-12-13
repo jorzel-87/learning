@@ -1,264 +1,258 @@
-PACKAGES
+FOR
 
-Every Go program is made up of packages.
+Go has only one looping construct, the for loop.
 
-Programs start running in package main.
+The basic for loop has three components separated by semicolons:
 
-This program is using the packages with import paths "fmt" and "math/rand".
+    the init statement: executed before the first iteration
+    the condition expression: evaluated before every iteration
+    the post statement: executed at the end of every iteration
 
-By convention, the package name is the same as the last element of the import path. For instance, the "math/rand" package comprises files that begin with the statement package rand.
+The init statement will often be a short variable declaration, and the variables declared there are visible only in the scope of the for statement.
+
+The loop will stop iterating once the boolean condition evaluates to false.
+
+Note: Unlike other languages like C, Java, or JavaScript there are no parentheses surrounding the three components of the for statement and the braces { } are always required.
+
+package main
+
+import "fmt"
+
+func main() {
+	for i := 0; i < 10; i++ {
+		fmt.Println(i)
+	}
+}
+
+
+Init and post are optional:
+
+
+func main() {
+	i := 1
+	for ; i < 10; {
+		i += i
+		fmt.Println(i)
+	}
+}
 
 ###############################################
 
-IMPORTS
+WHILE (really it's just for)
+
+package main
+
+import "fmt"
+
+func main() {
+	sum := 1
+	for sum < 1000 {
+		sum += sum
+		fmt.Println(sum)
+	}
+	fmt.Println("Sum is:", sum)
+}
+
+
+(If you omit the loop condition it loops forever)
+
+func main() {
+	for {
+	}
+}
+
+###############################################
+
+IF, ELSE
+
+package main
+ 
+import (
+	"fmt"
+)
+ 
+func main() {
+	x := 100
+ 
+	if x == 100 {
+		fmt.Println("It equals:)")
+	} else {
+		fmt.Println("Not equal:/")
+	}
+}
+
+###############################################
+
+IF WITH SHORT STATEMENT
+
+Like for, the if statement can start with a short statement to execute before the condition.
+
+Variables declared by the statement are only in scope until the end of the if. 
+
+package main
+
+import "fmt"
+import "math"
+
+func add(x int, y int) int {
+	return x + y
+}
+
+var k float64 = 2
+
+func main() {
+	if v := math.Pow(k, k); v < 5 {
+	fmt.Println(add(10, 15))
+	}
+//fmt.Println(v)
+}
+
+###############################################
+
+IF, ELSE, SHORT STATMENTS AND VARS
+
+Variables declared inside an if short statement are also available inside any of the else blocks. 
+
+
+package main
 
 import (
 	"fmt"
 	"math"
 )
 
-=
-
-import "fmt"
-import "math"
-
-###############################################
-
-EXPORTED NAMES
-
-In Go, a name is exported if it begins with a capital letter. For example, Pizza is an exported name, as is Pi, which is exported from the math package.
-
-pizza and pi do not start with a capital letter, so they are not exported.
-
-When importing a package, you can refer only to its exported names. Any "unexported" names are not accessible from outside the package.
-
-###############################################
-
-FUNCTION
-
-A function can take zero or more arguments.
-
-In this example, add takes two parameters of type int.
-
-Notice that the type comes after the variable name.
-
-func add(x int, y int) int {
-	return x + y
-}
-
-https://blog.golang.org/declaration-syntax
-
-When two or more consecutive named function parameters share a type, you can omit the type from all but the last.
-
-func add(x, y int) int {
-	return x + y
-}
-
-###############################################
-
-MULTIPLE RESULTS
-
-A function can return any number of results.
-
-The swap function returns two strings.
-
-func swap(x, y string) (string, string) {
-	return y, x
+func pow(x, n, lim float64) float64 {
+	if v := math.Pow(x, n); v < lim {
+		return v
+	} else {
+		fmt.Printf("%g >= %g\n", v, lim)
+	}
+	// can't use v here, though
+	return lim
 }
 
 func main() {
-	a, b := swap("hello", "world")
-	fmt.Println(a, b)
+	fmt.Println(
+		pow(3, 2, 10),
+		pow(3, 3, 20),
+	)
 }
 
 ###############################################
 
-READING A TYPE OF VAR
+SWITCH
 
-Type of var:
+shorter way to write a sequence of if - else 
 
-func main() {
-	z := 3
-	fmt.Printf("z = %T\n", z) 
-}
-
-###############################################
-
-VARIABLES WITH INITIALIZERS
-
-A var declaration can include initializers, one per variable.
-
-If an initializer is present, the type can be omitted; the variable will take the type of the initializer.
-
-func main() {
-	var c, python, java = true, false, "no!"
-	fmt.Println(c, python, java)
-	fmt.Printf("c, python, java = %T, %T, %T", c, python, java)
-}
-
-###############################################
-
-NAMED RETURN VALUES
-
-Go's return values may be named. If so, they are treated as variables defined at the top of the function.
-
-These names should be used to document the meaning of the return values.
-
-A return statement without arguments returns the named return values. This is known as a "naked" return.
-
-Naked return statements should be used only in short functions, as with the example shown here. They can harm readability in longer functions.
-
-func split(sum int) (x, y int) {
-	x = sum * 4 / 9
-	y = sum - x
-	return
-}
-
-###############################################
-
-VARIABLES
-
-The var statement declares a list of variables; as in function argument lists, the type is last.
-
-A var statement can be at package or function level. We see both in this example.
-
-package main
-
-import "fmt"
-
-var c, python, java bool
-
-func main() {
-	var i int
-//	var i int = 4
-	fmt.Println(i, c, python, java)
-}
-
-###############################################
-
-SHORT VARIABLES DECLARATIONS
-
-Inside a function, the := short assignment statement can be used in place of a var declaration with implicit type.
-
-Outside a function, every statement begins with a keyword (var, func, and so on) and so the := construct is not available.
-
-k := 3
-
-VS
-
-var k int = 3
-
-###############################################
-
-TYPES
-
-bool
-
-string
-
-int  int8  int16  int32  int64
-uint uint8 uint16 uint32 uint64 uintptr
-
-byte // alias for uint8
-
-rune // alias for int32
-     // represents a Unicode code point
-
-float32 float64
-
-complex64 complex128
-
-Example:
+Go's switch is like the one in C, C++, Java, JavaScript, and PHP, except that Go only runs the selected case, not all the cases that follow. In effect, the break statement that is needed at the end of each case in those languages is provided automatically in Go. Another important difference is that Go's switch cases need not be constants, and the values involved need not be integers. 
 
 package main
 
 import (
 	"fmt"
-	"math/cmplx"
-)
-
-var (
-	ToBe   bool       = false
-	MaxInt uint64     = 1<<64 - 1
-	z      complex128 = cmplx.Sqrt(-5 + 12i)
+	"runtime"
 )
 
 func main() {
-	fmt.Printf("Type: %T Value: %v\n", ToBe, ToBe)
-	fmt.Printf("Type: %T Value: %v\n", MaxInt, MaxInt)
-	fmt.Printf("Type: %T Value: %v\n", z, z)
+	fmt.Print("Go runs on ")
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux.")
+	default:
+		// freebsd, openbsd,
+		// plan9, windows...
+		fmt.Printf("%s.\n", os)
+	}
 }
 
-###############################################
-
-ZERO VALUES
-
-Variables declared without an explicit initial value are given their zero value.
-
-The zero value is:
-
-0 for numeric types,
-false for the boolean type, and
-"" (the empty string) for strings.
+another example:
 
 func main() {
-	var i int
-	var f float64
-	var b bool
-	var s string
-	fmt.Printf("%v %v %v %q\n", i, f, b, s)
+ 	
+
+    i := "Przypadek3"
+    fmt.Print("Write ", i, " as ")
+    switch i {
+    case "Przypadek1":
+        fmt.Println("one")
+    case "Przypadek2":
+        fmt.Println("")
+    case "Przypadek3":
+        fmt.Println("three")}
 }
 
-###############################################
 
-TYPE CONVERTIONS
+Switch cases evaluate cases from top to bottom, stopping when a case succeeds.
 
-var i int = 42
-var f float64 = float64(i)
-var u uint = uint(f)
+(For example,
 
-or
+switch i {
+case 0:
+case f():
+}
 
-i := 42
-f := float64(i)
-u := uint(f)
+does not call f if i==0.) 
 
-###############################################
 
-TYPE INFERENCE
+Switch without a condition is the same as switch true.
+
+This construct can be a clean way to write long if-then-else chains. 
+
+package main
+
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
-	v := 42 // change me!
-	fmt.Printf("v is of type %T\n", v)
+	t := time.Now()
+	switch {
+	case t.Hour() < 12:
+		fmt.Println("Good morning!")
+	case t.Hour() < 17:
+		fmt.Println("Good afternoon.")
+	default:
+		fmt.Println("Good evening.")
+	}
 }
 
 ###############################################
 
-CONSTANTS
+DEFER
 
-High precision values.
+A defer statement defers the execution of a function until the surrounding function returns.
 
-Constants are declared like variables, but with the const keyword.
-
-Constants can be character, string, boolean, or numeric values.
-
-Constants cannot be declared using the := syntax.
+The deferred call's arguments are evaluated immediately, but the function call is not executed until the surrounding function returns. 
 
 package main
 
 import "fmt"
 
-const Pi = 3.14
-
 func main() {
-	const World = "??"
-	fmt.Println("Hello", World)
-	fmt.Println("Happy", Pi, "Day")
+	defer fmt.Println("world")
 
-	const Truth = true
-	fmt.Println("Go rules?", Truth)
-	fmt.Printf("Truth is of type %T\n", Truth)
-	fmt.Printf("Pi is of type %T\n", Pi)
+	fmt.Println("hello")
 }
 
-https://gobyexample.com/constants
+Stacking DEFERS
+
+Deferred function calls are pushed onto a stack. When a function returns, its deferred calls are executed in last-in-first-out order.
+
+To learn more about defer statements read this blog post. 
+
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("counting")
+
+	for i := 0; i < 10; i++ {
+		defer fmt.Println(i)
+	}
+
+	fmt.Println("done")
+}
