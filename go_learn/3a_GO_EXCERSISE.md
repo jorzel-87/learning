@@ -9,13 +9,33 @@ The choice of image is up to you. Interesting functions include (x+y)/2, x*y, an
 
 (Use uint8(intValue) to convert between types.)
 
+
 package main
 
-import "golang.org/x/tour/pic"
+import "code.google.com/p/go-tour/pic"
 
 func Pic(dx, dy int) [][]uint8 {
+
+    //making matrix
+
+    p := make([][]uint8)
+
+    for i := 0; i < dy; i++ {
+        p[i] := make([]uint8, dx)
+    }
+
+    //filling up the matrix line by line
+
+    for y := 0; y < dy; y++ {
+        for x := 0; x < dx; x++ {
+            p[x][y] = uint8(x+y)/2
+        }
+    }
+
+return p
 }
 
+
 func main() {
-	pic.Show(Pic)
+pic.Show(Pic)
 }
