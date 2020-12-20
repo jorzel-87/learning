@@ -1,0 +1,9 @@
+https://echo.labstack.com/cookbook/hello-world
+
+Hell <name>
+
+Gdzie imi? b?dzie pobierane z postu i z getu requestu.
+
+https://echo.labstack.com/guide/request
+
+https://echo.labstack.com/guide/response
