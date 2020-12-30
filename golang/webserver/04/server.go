@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type Cat struct {
@@ -89,7 +90,6 @@ func addDog(c echo.Context) error {
 
 func addHamster(c echo.Context) error {
 	hamster := Hamster{}
-	//  https://echo.labstack.com/guide/request
 	err := c.Bind(&hamster)
 	if err != nil {
 		log.Printf("Failed processing addHamster: %s", err)
@@ -100,8 +100,23 @@ func addHamster(c echo.Context) error {
 
 }
 
+func mainAdmin(c echo.Context) error {
+	return c.String(http.StatusOK, "Welcome to the secret admin main page!")
+}
+
 func main() {
 	e := echo.New()
+
+	//  http://localhost:1323/admin/main
+	g := e.Group("/admin")
+
+	// middleware usage - logging server interaction
+	// only for given group
+	g.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: `[${time_rfc3339}] ${status} ${method} ${host}${path} ${latency_human}` + "\n",
+	}))
+
+	g.GET("/main", mainAdmin)
 	e.GET("/", hello)
 	e.GET("/cats/:data", getCats)
 	e.POST("/cats", addCat)
