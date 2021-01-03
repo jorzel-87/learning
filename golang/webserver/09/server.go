@@ -150,6 +150,18 @@ func login(c echo.Context) error {
 			log.Println("Error Creating JWT Token", err)
 			return c.String(http.StatusInternalServerError, "Something went wrong")
 		}
+
+		//jwtCookie := &http.Cookie{}
+
+		//this is the same - tested
+		jwtCookie := new(http.Cookie)
+
+		jwtCookie.Name = "JWTCookie"
+		jwtCookie.Value = token
+		jwtCookie.Expires = time.Now().Add(48 * time.Hour)
+
+		c.SetCookie(jwtCookie)
+
 		return c.JSON(http.StatusOK, map[string]string{
 			"message": "Successfully logged in!",
 			"token":   token,
@@ -241,6 +253,9 @@ func main() {
 	jwtGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
 		SigningMethod: "HS512",
 		SigningKey:    []byte("mySecret!"),
+		//	TokenLookup:   "header:MyHeader",
+		TokenLookup: "cookie:JWTCookie",
+		//	AuthScheme:    "Anything_here",
 	}))
 
 	cookieGroup.Use(checkCookie)
